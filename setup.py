@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-version = '1.5.dev0'
+version = '1.5.dev1'
 
 import os
 from setuptools import setup, find_packages
