@@ -54,12 +54,13 @@ else:
 
     def _lock_file(file):
         try:
-            fcntl.flock(file.fileno(), _flags)
-        except IOError:
-            raise LockError("Couldn't lock %r" % file.name)
+            fcntl.lockf(file.fileno(), _flags)
+        except OSError as e:
+            if e.errno == errno.EACCES or e.errno == errno.EAGAIN:
+                raise LockError("Couldn't lock %r" % file.name)
 
     def _unlock_file(file):
-        fcntl.flock(file.fileno(), fcntl.LOCK_UN)
+        fcntl.lockf(file.fileno(), fcntl.LOCK_UN)
 
 class LazyHostName(object):
     """Avoid importing socket and calling gethostname() unnecessarily"""
